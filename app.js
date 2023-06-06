@@ -33,7 +33,7 @@ app.set('views', path.join(__dirname, 'KWAS'));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
-app.use(express.static('KWAS'));
+app.use('/KWAS', express.static(path.join(__dirname, 'KWAS')));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -19,24 +19,13 @@
       src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
       crossorigin="anonymous"
     ></script>
-
-    <style>
-      .scholar_table {
-        border-collapse: collapse;
-      }
-
-      .scholar_table th,
-      .scholar_table td {
-        border: 1px solid black;
-      }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
-
   <body class="sb-nav-fixed">
     <header class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
       <!-- First Section -->
       <div class="navbar-brand">
-        <a class="navbar-brand ps-3" href="../main/index.html">KWAS</a>
+        <a class="navbar-brand ps-3" href="/index.html">KWAS</a>
       </div>
       <button
         class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0"
@@ -52,7 +41,6 @@
         class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0"
       ></div>
     </header>
-
     <script>
       // JavaScript code to load content dynamically into the second section
       var dynamicHeader = document.getElementById("dynamicHeader");
@@ -88,7 +76,7 @@
       <!-- index contents ::: 여기에 템플릿 넣으세요 -->
       <div id="layoutSidenav_content">
         <main>
-          <div class="container-fluid px -4">
+          <div class="container-fluid px-4" style="width: 100%; margin: 0 auto">
             <div class="align-items-center justify-content-center text-center">
               <a class="navbar-brand" href="../main/index.html"
                 ><img
@@ -98,65 +86,114 @@
                   height="20%"
               /></a>
             </div>
-
             <div class="card mb-4">
-              <div class="card-header">게시판</div>
+              <div class="card-header">강의계획서 조회</div>
               <div class="card-body">
-                <div class="container">
-                  <table class="scholar_table">
-                    <colgroup>
-                      <col style="width: 10%" />
-                      <col style="width: 25%" />
-                      <col style="width: 10%" />
-                      <col style="width: 20%" />
-                      <col style="width: 20%" />
-                      <col style="width: 15%" />
-                    </colgroup>
+                <div class="chart-area">
+                  <canvas id="myLineChart" width="100%" height="30"></canvas>
+                </div>
+              </div>
+
+              <script>
+                // 데이터 예시
+                const semesterLabels = [
+                  "1-1학기",
+                  "1-2학기",
+                  "2-1학기",
+                  "2-2학기",
+                  "3-1학기",
+                  "3-2학기",
+                  "4-1학기",
+                  "4-2학기",
+                ];
+                const subjectGrades = [
+                  [4.0, 4.3, 4.0, 3.8, 4.0, 4.1, 4.0, 3.8], // 전체 성적
+                  [, , 4.5, 4.0, 3.8, 4.0, 4.1, 4.0, 4.0], // 전공 성적
+                  [3.0, 3.8, 3.8, 3.5, 4.0, 3.6, 4.0, 4.0], // 교양 성적
+                ];
+
+                // 그래프 생성
+                const ctx = document
+                  .getElementById("myLineChart")
+                  .getContext("2d");
+                const myChart = new Chart(ctx, {
+                  type: "line",
+                  data: {
+                    labels: semesterLabels,
+                    datasets: [
+                      {
+                        label: "전체",
+                        data: subjectGrades[0],
+                        fill: false,
+                        borderColor: "rgba(255, 0, 0, 1)",
+                        borderWidth: 1,
+                      },
+                      {
+                        label: "전공",
+                        data: subjectGrades[1],
+                        fill: false,
+                        borderColor: "rgba(0, 255, 0, 1)",
+                        borderWidth: 1,
+                      },
+                      {
+                        label: "교양",
+                        data: subjectGrades[2],
+                        fill: false,
+                        borderColor: "rgba(0, 0, 255, 1)",
+                        borderWidth: 1,
+                      },
+                    ],
+                  },
+                  options: {
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        max: 4.5,
+                        stepSize: 0.5,
+                      },
+                    },
+                  },
+                });
+              </script>
+              <div class="card-body">
+                <!-- 학정번호 과목명 이수구분 학점 교수명 연락처 -->
+                <div class="container" style="width: 100%; margin: 0 auto">
+                  <table class="table table-hover">
                     <thead>
+                      <div class="text-center">
+                        <h5>2023년 1학기</h5>
+                      </div>
                       <tr>
-                        <th>구분</th>
-                        <th>학과/학부</th>
-                        <th>학번</th>
-                        <th>이름</th>
-                        <th>학적상황</th>
-                        <th>이수학기</th>
+                        <th style="width: 15%">학정번호</th>
+                        <th style="width: 15%">과목명</th>
+                        <th style="width: 15%">개설학과</th>
+                        <th style="width: 10%">이수구분</th>
+                        <th style="width: 5%">학점</th>
+                        <th style="width: 10%">교수명</th>
+                        <th style="width: 10%">성적</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>학부</td>
-                        <td>컴퓨터정보공학부 정보공학전공</td>
-                        <td>2017202062</td>
-                        <td>정구찬</td>
-                        <td>4학년 재학</td>
-                        <td>6</td>
+                        <td>H020-4-0846-01</td>
+                        <td>소프트웨어공학</td>
+                        <td>컴퓨터정보공학부</td>
+                        <td>전선</td>
+                        <td>3</td>
+                        <td>이기훈</td>
+                        <td>A</td>
+                      </tr>
+                      <tr>
+                        <td>H020-4-8483-01</td>
+                        <td>머신러닝</td>
+                        <td>컴퓨터정보공학부</td>
+                        <td>전선</td>
+                        <td>3</td>
+                        <td>박철수</td>
+                        <td>A+</td>
                       </tr>
                     </tbody>
                   </table>
-                  <br />
-                  <br />
-                  <table class="scholar_table">
-                    <colgroup>
-                      <col width="33%" />
-                      <col width="33%" />
-                      <col width="33%" />
-                    </colgroup>
-                    <thead>
-                      <tr>
-                        <th>년도/학기</th>
-                        <th>장학명</th>
-                        <th>금액</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td colspan="3">장학금을 수여한 내역이 없습니다</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <div style="text-align: center">
-                    <b>전체 장학 수여 건수: 0</b>
-                  </div>
                 </div>
               </div>
             </div>
